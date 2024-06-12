@@ -1,74 +1,77 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:workouit/providers/auth_provider.dart';
 import 'package:workouit/screens/home_screen.dart';
+import 'package:workouit/screens/auth/login_screen.dart';
+import 'package:workouit/screens/main_screen.dart';
+import 'package:workouit/screens/post_registeration/post_registeration.dart';
 import 'package:workouit/screens/profile_screen.dart';
+import 'package:workouit/screens/auth/register_screen.dart';
 import 'package:workouit/screens/stats_screen.dart';
 import 'package:workouit/screens/workout_plans_screen.dart';
+import 'package:workouit/theme.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => AutheProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Workout Planner',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          bottomNavigationBarTheme: BottomNavigationBarThemeData(
-            selectedItemColor: Colors.amber[800],
-            unselectedItemColor: Colors.grey[600],
-            backgroundColor: Colors.white,
-            showUnselectedLabels: true,
-            type: BottomNavigationBarType.fixed,
-          ),
-        ),
-        home: MainScreen());
+      title: 'Workout Planner',
+      theme: AppTheme.theme,
+      debugShowCheckedModeBanner: false,
+      home: AuthWrapper(),
+      routes: {
+        '/home': (context) => HomeScreen(),
+        '/login': (context) => LoginScreen(),
+        '/post_registration': (context) => PostRegistrationScreen(),
+        '/profile': (context) => ProfileScreen(),
+        '/register': (context) => RegisterScreen(),
+        '/stats': (context) => StatsScreen(),
+        '/workout_plans': (context) => WorkOutPlansScreen(),
+      },
+    );
   }
 }
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
-
-  @override
-  State<MainScreen> createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
-  int _selectIndex = 0;
-  static List<Widget> _widgetOptions = <Widget>[
-    HomeScreen(),
-    WorkOutPlansScreen(),
-    StatsScreen(),
-    ProfileScreen()
-  ];
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectIndex = index;
-    });
-  }
-
+class AuthWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: _widgetOptions[_selectIndex],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.fitness_center), label: 'Plans'),
-          BottomNavigationBarItem(icon: Icon(Icons.assessment), label: 'Stats'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile')
-        ],
-        currentIndex: _selectIndex,
-        onTap: _onItemTapped,
-      ),
+    return Consumer<AutheProvider>(
+      builder: (context, authProvider, child) {
+        return StreamBuilder<User?>(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              print('AuthWrapper: Waiting for authentication state');
+              return Scaffold(
+                body: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            } else if (snapshot.hasData) {
+              print('AuthWrapper: User is signed in');
+              return MainScreen();
+            } else {
+              print('AuthWrapper: User is not signed in');
+              return LoginScreen();
+            }
+          },
+        );
+      },
     );
   }
 }
