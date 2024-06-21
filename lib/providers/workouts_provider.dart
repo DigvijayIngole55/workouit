@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:workouit/models/motivational_tips_model.dart';
 import 'package:workouit/models/previous_workout_model.dart';
 import 'package:workouit/models/recent_acitivity_model.dart';
+import 'package:workouit/models/workout_model.dart';
 
 class WorkoutsProvider with ChangeNotifier {
   List<PreviousWorkoutModel> _previousWorkouts = [
@@ -46,9 +47,29 @@ class WorkoutsProvider with ChangeNotifier {
         tip: 'Consistency is key. Keep pushing, and results will follow.'),
     // Add more default tips as needed
   ];
+
+  List<WorkoutModel> _workoutPlans = [
+    WorkoutModel(
+      id: '1',
+      name: 'Strength Training',
+      description: 'A full-body strength training workout.',
+      duration: 60,
+      difficulty: 'Intermediate',
+    ),
+    WorkoutModel(
+      id: '2',
+      name: 'Cardio Blast',
+      description: 'A high-intensity cardio workout.',
+      duration: 45,
+      difficulty: 'Advanced',
+    ),
+    // Add more default workout plans as needed
+  ];
+
   List<PreviousWorkoutModel> get previousWorkouts => _previousWorkouts;
   List<RecentActivityModel> get recentActivities => _recentActivities;
   List<MotivationalTipModel> get motivationalTips => _motivationalTips;
+  List<WorkoutModel> get workoutPlans => _workoutPlans;
 
   void setPreviousWorkouts(List<PreviousWorkoutModel> workouts) {
     _previousWorkouts = workouts;
@@ -62,6 +83,11 @@ class WorkoutsProvider with ChangeNotifier {
 
   void setMotivationalTips(List<MotivationalTipModel> tips) {
     _motivationalTips = tips;
+    notifyListeners();
+  }
+
+  void setWorkoutPlans(List<WorkoutModel> plans) {
+    _workoutPlans = plans;
     notifyListeners();
   }
 }

@@ -7,6 +7,7 @@ class UserModel {
   String fitnessGoals;
   Map<String, dynamic> workoutStatistics;
   DateTime registrationDate;
+  String? profileImageUrl; // Make profileImageUrl nullable
 
   UserModel({
     required this.name,
@@ -17,6 +18,7 @@ class UserModel {
     required this.fitnessGoals,
     required this.workoutStatistics,
     required this.registrationDate,
+    this.profileImageUrl,
   });
 
   // Convert UserModel to JSON
@@ -30,6 +32,7 @@ class UserModel {
       'fitnessGoals': fitnessGoals,
       'workoutStatistics': workoutStatistics,
       'registrationDate': registrationDate.toIso8601String(),
+      'profileImageUrl': profileImageUrl,
     };
   }
 
@@ -44,6 +47,7 @@ class UserModel {
       fitnessGoals: json['fitnessGoals'],
       workoutStatistics: Map<String, dynamic>.from(json['workoutStatistics']),
       registrationDate: DateTime.parse(json['registrationDate']),
+      profileImageUrl: json['profileImageUrl'],
     );
   }
 }
