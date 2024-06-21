@@ -3,6 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workouit/providers/auth_provider.dart';
+import 'package:workouit/providers/user_provider.dart';
+import 'package:workouit/providers/workouts_provider.dart';
 import 'package:workouit/screens/home_screen.dart';
 import 'package:workouit/screens/auth/login_screen.dart';
 import 'package:workouit/screens/main_screen.dart';
@@ -17,8 +19,12 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => AutheProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => AutheProvider()),
+        ChangeNotifierProvider(create: (context) => WorkoutsProvider()),
+      ],
       child: const MyApp(),
     ),
   );

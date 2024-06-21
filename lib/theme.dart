@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   static ThemeData get theme {
+    final textTheme = GoogleFonts.poppinsTextTheme();
+
     return ThemeData(
+      fontFamily: 'Poppins',
       colorScheme: ColorScheme.light(
         primary: Color(0xFF191A1E), // Dark Gray
         secondary: Color(0xFFE0FF64), // Neon Yellow
@@ -16,11 +20,46 @@ class AppTheme {
         onError: Colors.white, // Text color on error
       ),
       scaffoldBackgroundColor: Color(0xFFF2F2F2), // Light Gray
-      textTheme: TextTheme(
-        headlineLarge: TextStyle(
-            color: Colors.black, fontSize: 32, fontWeight: FontWeight.bold),
-        headlineMedium: TextStyle(color: Colors.black),
-        bodySmall: TextStyle(color: Colors.black),
+      textTheme: textTheme.copyWith(
+        headlineLarge: GoogleFonts.poppins(
+          textStyle: textTheme.headlineLarge!.copyWith(
+            color: Colors.black,
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        headlineMedium: GoogleFonts.poppins(
+          textStyle: textTheme.headlineMedium!.copyWith(
+            color: Colors.black,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        headlineSmall: GoogleFonts.poppins(
+          textStyle: textTheme.headlineSmall!.copyWith(
+            color: Colors.black,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        bodyLarge: GoogleFonts.poppins(
+          textStyle: textTheme.bodyLarge!.copyWith(
+            color: Colors.black,
+            fontSize: 16,
+          ),
+        ),
+        bodyMedium: GoogleFonts.poppins(
+          textStyle: textTheme.bodyMedium!.copyWith(
+            color: Colors.black,
+            fontSize: 14,
+          ),
+        ),
+        bodySmall: GoogleFonts.poppins(
+          textStyle: textTheme.bodySmall!.copyWith(
+            color: Colors.black,
+            fontSize: 12,
+          ),
+        ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -37,9 +76,10 @@ class AppTheme {
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
         ),
-        labelStyle: TextStyle(color: Colors.black),
+        labelStyle: GoogleFonts.poppins(
+          textStyle: textTheme.bodyMedium!.copyWith(color: Colors.black),
+        ),
       ),
-
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           foregroundColor: Color(0xFFE0FF64), // Neon Yellow
